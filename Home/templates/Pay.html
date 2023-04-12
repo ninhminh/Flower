@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="static/css/Pay.css">
+</head>
+<body>
+    <div id="header">
+        <div class="header__logoshop">
+            <img src="static/img/logoandbanner/logo.jpg" alt="">
+        </div>
+        <div class="header__navbar">
+            <ul>
+                <a href="/Account">
+                    <li><i class="fas fa-user"></i> Đăng Kí</li>
+                </a>
+                <a href="/Payment">
+                    <li><i class="fas fa-money-bill"></i> Thanh Toán</li>
+                </a>
+                <a href="/Pay">
+                    <li><i class="fas fa-cart-plus"></i> Giỏ Hàng</li>
+                </a>
+                <a href="/Login">
+                    <li><i class="fas fa-lock"></i> Đăng Nhập</li>
+            </ul>
+        </div>
+        <div class="clear">
+        </div>
+        <div class="header__nav">
+            <div class="header__nav__option">
+                <ul>
+                    <a href="/Home">
+                        <li>Trang chủ</li>
+                    </a>
+                    <a href="/Shop">
+                        <li>Shop</li>
+                    </a>
+                    <a href="/Contact">
+                        <li>Liên Hệ</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="header__nav__search">
+                <form action="">
+                    <input type="text" placeholder="Tìm Kiếm.." name="search">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+    <div id="container">
+        <div class="container__tablepay">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Sản Phẩm</th>
+                        <th>Tên</th>
+                        <th>Đơn Giá</th>
+                        <th>Số lượng</th>
+                        <th>Status</th>
+                        <th>Tổng Đơn Hàng</th>
+                        <th>Tùy chọn</th>
+                    </tr>
+                <thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <th>hoa</th>
+                        <th>hoa</th>
+                        <th>300</th>
+                        <th>2</th>
+                        <th><input type="checkbox" name="" id=""></th>
+                        <th>600</th>
+                        <td class="setupproduct">
+                            <div class="editproduct">
+                                Sửa
+                            </div>
+                            <div class="deleteproduct">
+                                Xóa
+                            </div>
+                            <div class="clear">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container__optionpay">
+            <div class="container__optionpay__inforsale">
+                <div class="optionpay__inforsale__code">
+                    <div class="optionpay__inforsale__code__input">
+                        <label for="phieugiamgia">Phiếu Giảm Giá:</label>
+                        <select id="phieugiamgia">
+                            <option value="volvo">Volvo</option>
+                            <option value="saab">Saab</option>
+                            <option value="vw">VW</option>
+                            <option value="audi" selected>Audi</option>
+                        </select>
+                    </div>
+                    <div class="optionpay__inforsale__code__input">
+                        <label for="phieuquatang">Phiếu Quà Tặng:</label>
+                        <select id="phieuquatang">
+                            <option value="volvo">Volvo</option>
+                            <option value="saab">Saab</option>
+                            <option value="vw">VW</option>
+                            <option value="audi" selected>Audi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="optionpay__inforsale__user">
+                    <input type="text" placeholder="Quốc Gia">
+                    <input type="text" placeholder="Tỉnh Thành">
+                    <input type="text" placeholder="Mã Code">
+                </div>
+                <div class="optionpay__inforsale__button">
+                    <input type="button" value="Tiếp tục">
+                </div>
+            </div>
+            <div class="container__optionpay__inforpay">
+                <div class="container__optionpay__inforpay__text">
+                    <input type="text" placeholder="Tổng Giỏi Hàng">
+                    <input type="text" placeholder="Vat">
+                    <input type="text" placeholder="Phí Giao hàng">
+                    <input type="text" placeholder="Tổng Thanh Toán">
+                </div>
+                <div class="container__optionpay__inforpay__button">
+                    <input type="button" value="Thay Đổi Đơn Hàng">
+                    <a href="/Payment"><input type="button" value="Thanh Toán"></a>
+                </div>
+            </div>
+            <div class="clear">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
