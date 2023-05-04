@@ -48,7 +48,7 @@
                 </div>
                 <div class="header__nav__search">
                     <form action="">
-                        <input type="text" placeholder="Tìm Kiếm.." name="search">
+                        <input type="text" placeholder="Tìm Kiếm.." name="search" id="find" onkeyup="search()">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
@@ -61,56 +61,52 @@
     </div>
     <div id="container">
         <div class="container__optionproduct">
-            <div class="container__optionby">
+            <div class="container__optionby" id="productCategory">
                 <div class="container__optionby__title">
                     <h1>Danh Mục</h1>
                 </div>
                 <ul>
-                    <a href="/Shop">
+                   
+                    <button onclick="productByCategory(1)">
                         <li>Hoa Sự Kiện</li>
-                    </a>
-                    <a href="/Shop">
+                    </button>
+                    <div onclick="productByCategory(2)">
                         <li>Hoa Tình Yêu</li>
-                    </a>
-                    <a href="/Shop">
+                    </div>
+                    <div onclick="productByCategory(3)">
                         <li>Hoa Chia Buồn</li>
-                    </a>
-                    <a href="/Shop">
-                        <li>Hoa Tặng Quà</li>
-                    </a>
-                </ul>
-            </div>
-            <div class="container__optionby">
-                <div class="container__optionby__title">
-                    <h1>Kiểu Dáng</h1>
-                </div>
-                <ul>
-                    <a href="/Shop">
+                    </div>
+                    <div onclick="productByCategory(4)">
+                        <li>Hoa Tặng quà</li>
+                    </div>
+                    <div onclick="productByCategory(5)">
                         <li>Bó</li>
-                    </a>
-                    <a href="/Shop">
-                        <li>Giỏ</li>
-                    </a>
-                    <a href="/Shop">
+                    </div>
+                    <div onclick="productByCategory(7)">
                         <li>Lãng</li>
-                    </a>
-                    <a href="/Shop">
+                    </div>
+                    <div onclick="productByCategory(6)">
+                        <li>Giỏ</li>
+                    </div>
+                    <div onclick="productByCategory(8)">
                         <li>Bình</li>
-                    </a>
+                    </div>
+  
                 </ul>
             </div>
+            
         </div>
-        <div class="container__listproduct">
+        <div class="container__listproduct" id="update" >
             <div class="container__listproduct__product">
                 <div class="product__img">
-                    <a href="/html/DetailProduct/lancuoi.html">
+                    <a href="/html/DetailProduct/">
 
-                        <img src="static/img/theloai/giohoa/lần cuối- 900k.jpg" alt="">
+                        <img src="" alt="">
                     </a>
                 </div>
                 <div class="product__inforproduct">
-                    <h1>600</h1>
-                    <p>Lần Cuối</p>
+                    <h1>  </h1>
+                    <p>   </p>
                     <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
@@ -119,12 +115,12 @@
                 <div class="product__img">
                     <a href="">
 
-                        <img src="static/img/theloai/giohoa/sinh nhật vui vẻ- 730k.jpg" alt="">
+                        <img src="" alt="">
                     </a>
                 </div>
                 <div class="product__inforproduct">
-                    <h1>300</h1>
-                    <p>Sinh Nhật Vui Vẻ</p>
+                    <h1>   </h1>
+                    <p>    </p>
                     <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
@@ -133,12 +129,12 @@
                 <div class="product__img">
                     <a href="">
 
-                        <img src="static/img/theloai/giohoa/tiễn biệt- 850k.jpg" alt="">
+                        <img src="" alt="">
                     </a>
                 </div>
                 <div class="product__inforproduct">
-                    <h1>600</h1>
-                    <p>Tiễn Biệt</p>
+                    <h1>   </h1>
+                    <p>    </p>
                     <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
@@ -146,12 +142,12 @@
             <div class="container__listproduct__product">
                 <div class="product__img">
                     <a href="">
-                        <img src="static/img/theloai/langhoa/an khang- 1700k.jpg" alt="">
+                        <img src="" alt="">
                     </a>
                 </div>
                 <div class="product__inforproduct">
-                    <h1>600</h1>
-                    <p>An Khang</p>
+                    <h1>    </h1>
+                    <p>     </p>
                     <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
@@ -160,12 +156,12 @@
                 <div class="product__img">
                     <a href="">
 
-                        <img src="static/img/theloai/langhoa/an nghỉ-1760k.jpg" alt="">
+                        <img src="" alt="">
                     </div>
                     </a>
                 <div class="product__inforproduct">
-                    <h1>300</h1>
-                    <p>An Nghỉ</p>
+                    <h1>   </h1>
+                    <p>    </p>
                     <div class="addtocart"><a href="static/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
@@ -174,18 +170,19 @@
                 <div class="product__img">
                     <a href="">
 
-                        <img src="static/img/theloai/langhoa/Hạnh phúc-1500k.jpg" alt="">
+                        <img src="" alt="">
                     </div>
                     </a>
                 <div class="product__inforproduct">
-                    <h1>600</h1>
-                    <p>Hạnh Phúc</p>
+                    <h1>   </h1>
+                    <p>    </p>
                     <div class="addtocart"><a href="/Payment"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
         </div>
-        
     </div>    
 </body>
+<script src="/static/js/shop.js"></script>
+<script src="/static/js/base.js"></script>
 </html>

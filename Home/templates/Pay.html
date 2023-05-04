@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <link rel="stylesheet" href="static/css/Pay.css">
+    <link rel="stylesheet" href="/static/css/Pay.css">
 </head>
 <body>
     <div id="header">
@@ -46,7 +46,7 @@
             </div>
             <div class="header__nav__search">
                 <form action="">
-                    <input type="text" placeholder="Tìm Kiếm.." name="search">
+                    <input type="text" placeholder="Tìm Kiếm.." name="search" id="find" onkeyup="search()">
                     <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
             </div>
@@ -60,23 +60,26 @@
                 <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Sản Phẩm</th>
+                        
                         <th>Tên</th>
                         <th>Đơn Giá</th>
                         <th>Số lượng</th>
-                        <th>Status</th>
+                        
                         <th>Tổng Đơn Hàng</th>
                         <th>Tùy chọn</th>
                     </tr>
                 <thead>
-                <tbody>
+                <tbody id="ok">
                     <tr>
                         <th>1</th>
-                        <th>hoa</th>
+                        
                         <th>hoa</th>
                         <th>300</th>
-                        <th>2</th>
-                        <th><input type="checkbox" name="" id=""></th>
+                        <th>
+                            
+                            <input type="number" required><br><br>
+                        </th>
+                        
                         <th>600</th>
                         <td class="setupproduct">
                             <div class="editproduct">
@@ -141,4 +144,6 @@
         </div>
     </div>
 </body>
+<script src="/static/js/cart.js"></script>
+<script src="/static/js/base.js"></script>
 </html>

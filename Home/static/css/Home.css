@@ -90,3 +90,40 @@ body{
   width: 100%;
   object-fit:contain;
 }
+.container__ListHot{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.container__ListHot .container__ListHot__Title{
+
+
+}
+.container__ListHot .container__ListHot__list{
+
+}
+.container__ListHot__list .ListHot__list__top{
+  /* width: 80%;
+  background-color: black;
+  box-shadow: 0 4px 8px 0 rgbra(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  margin-bottom: 25px; */
+
+}
+.ListHot__list__top .list__top__test{
+  width: 100%;
+}
+.list__top__test a{
+  display: inline-block;
+}
+.hi{
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  width: 33%;
+  list-style-type: none;
+  text-align: center;
+}
+
+.hai{
+  text-align: center;
+}

@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Home.urls')),
     path('Apiv1/', include('Apiv1.urls')),
+   
 ]

@@ -4,3 +4,4 @@ class User(models.Model):
     Password = models.CharField(max_length=255)
     FullName = models.CharField(max_length=255)
     Email = models.CharField(max_length=255)
+    

@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <link rel="stylesheet" href="Static/css/ProductDetail.css">
+    <link rel="stylesheet" href="static/css/ProductDetail.css">
 </head>
 <body>
     <div id="header">
         <div class="header__main">
             <div class="header__logoshop">
-                <img src="Static/img/logoandbanner/logo.jpg" alt="">
+                <img src="static/img/logoandbanner/logo.jpg" alt="">
             </div>
             <div class="header__navbar">
                 <ul>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="header__nav__search">
                     <form action="">
-                        <input type="text" placeholder="Tìm Kiếm.." name="search">
+                        <input type="text" placeholder="Tìm Kiếm.." name="search" id="find" onkeyup="search()">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>

@@ -46,7 +46,7 @@
             </div>
             <div class="header__nav__search">
                 <form action="">
-                    <input type="text" placeholder="Tìm Kiếm.." name="search">
+                    <input type="text" placeholder="Tìm Kiếm.." name="search" id="find" onkeyup="search()">
                     <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
             </div>
@@ -56,19 +56,25 @@
     </div>
     <div id="container">
         <div class="Signup__User">
-                <form action="">
-                    <div class="Signup__User__title">
+                <div action="">
+                    <div class="Signup__User__title" >
                         <h1>Đăng nhập tài khoản</h1>
                     </div>
-                    <div class="Signup__User__form">
-                        <input type="text" placeholder="Tên Đăng Nhập">
-                        <input type="text" placeholder="Mật Khẩu">
+                    <div class="Signup__User__form" >
+                        <input type="text" id="username"  placeholder="Tên Đăng Nhập">
+                        <input type="text" id="password"  placeholder="Mật Khẩu">
                     </div>
+                    
                     <div class="Signup__User__button">
-                        <input type="button" value="Đăng Kí">
+                        <input type="button" value="Đăng nhập" onclick="Login()">
                     </div>
-                </form>            
+                </div> 
+                <div id="Error">
+                    
+                </div>           
         </div>
     </div>    
 </body>
+<script src="/static/js/login.js"></script>
+<script src="/static/js/base.js"></script>
 </html>

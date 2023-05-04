@@ -13,19 +13,30 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from .views import Home1, Home, Account, Contact, Login, Pay, Payment, Product, ProductDetail, Shop
+from .views import  Home, Account, Contact, Login, Pay, Payment, Product, ProductDetail, Shop,ListCatalog, ListOrder, ListProduct,ListType, ListUser, AddProduct, EditProduct, EditUser,Search,Me, Pay, Cart, ChangePassword
 from django.urls import path
 
 urlpatterns = [
-    path('home', Home1.as_view()),
+   
     path('Account', Account.as_view()),
     path('Contact', Contact.as_view()),
     path('Home', Home.as_view()),
     path('Login', Login.as_view()),
     path('Payment', Payment.as_view()),
-    path('Pay', Pay.as_view()),
     path('Product', Product.as_view()),
-    path('ProductDeltail', ProductDetail.as_view()),
+    path('ProductDetail/<int:id>', ProductDetail.as_view()),
     path('Shop', Shop.as_view()),
-
+    path('ListCatalog', ListCatalog.as_view()),
+    path('ListOrder', ListOrder.as_view()),
+    path('ListProduct', ListProduct.as_view()),
+    path('ListType', ListType.as_view()),
+    path('ListUser', ListUser.as_view()),
+    path('AddProduct', AddProduct.as_view()),
+    path('EditProduct/<int:id>', EditProduct.as_view()), 
+    path('EditUser/<int:id>', EditUser.as_view()),
+    path('Search/<str:key>',Search.as_view()),
+    path('Pay/<int:id>', Pay.as_view()),
+    path('Me', Me.as_view()),
+    path('Cart',Cart.as_view()),
+    path('ChangePassword', ChangePassword.as_view()),
 ]
