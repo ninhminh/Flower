@@ -58,7 +58,7 @@ function order() {
     }
     console.log(productList)
  
-    var url = "/Apiv1/Cart";
+    var url = "/Apiv1/Order";
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url);
     xhr.setRequestHeader("userID", localStorage.getItem("userID"));
@@ -73,5 +73,5 @@ function order() {
     xhr.onerror = function () {
         alert("Network error");
     };
-xhr.send(JSON.stringify({ productList: productList }));
+    xhr.send(JSON.stringify({ productList: productList }));
 }

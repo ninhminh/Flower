@@ -1,1 +1,1 @@
-from . import User,Role,UserRole,Category,Message,Product,History,CategoryProduct, Order
+from . import User,Role,UserRole,Category,Product,CategoryProduct, Order

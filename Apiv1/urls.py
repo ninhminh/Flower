@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AllFlower, FlowerHot, Login, Signup, DetailProduct, Update, ProductByIDCategory,AddProduct, NewProduct, Delete, EditProduct, DeleteUser, AllUser, EditUser, Search, Pay, ListRole, NormalRole,Cart,AddCart, Account, Password, Logout
+from .views import AllFlower, FlowerHot, Login, Signup, DetailProduct, Update, ProductByIDCategory,AddProduct, NewProduct, Delete, EditProduct, DeleteUser, AllUser, EditUser, Search, Pay, ListRole, NormalRole,Cart, Account, Password, Logout, OrderProduct, AddCart, Statics
 
 
 urlpatterns = {
@@ -22,8 +22,10 @@ urlpatterns = {
     path('ListRole', ListRole.as_view()),
     path('NormalRole', NormalRole.as_view()),
     path('Cart', Cart.as_view()),
-    path('AddCart/<int:id>',AddCart.as_view()),
+    path('AddCart/<int:id>', AddCart.as_view()),
     path('Account', Account.as_view()),
     path('Password', Password.as_view()),
     path('Logout', Logout.as_view()), 
+    path('Order', OrderProduct.as_view()),
+    path('Statics', Statics.as_view()),
 }

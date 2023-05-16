@@ -8,7 +8,7 @@ const xhttp = new XMLHttpRequest();
         // chuyển về dữ liệu javascript
         var Response = JSON.parse(ResponseJson)
         if(xhttp.status=200){
-            alert('hiiiiiiiii')
+            //alert('hiiiiiiiii')
             var s1 = document.getElementById('update');
             var s1Html='';
             for (var i=0;i<Response.length;i++){

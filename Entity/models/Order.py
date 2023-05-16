@@ -7,4 +7,6 @@ class Order(models.Model):
     Date = models.DateTimeField()
     Status = models.CharField(max_length=255)
     Amount = models.IntegerField(null = True)
+    Address = models.CharField(max_length=255, null = True)
+    PhoneNumber = models.CharField(max_length=255, null = True)
     

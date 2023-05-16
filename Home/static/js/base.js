@@ -1,5 +1,5 @@
 function search(){
-    alert('kkk')
+    //alert('kkk')
     if(event.keyCode==13){
         var key = document.getElementById('find').value;
         
@@ -20,7 +20,7 @@ function role(){
             var s1= '';
             
             var a= document.getElementById('role1')
-            var a1 = ''
+            var a1 = '';
             if (response[0]['idRole']==1){
                 s1+='<a href="/Home"><li>Trang chủ</li> </a> <a href="/Shop"> <li>Shop</li> </a> <a href="/Contact"> <li>Liên Hệ</li> </a> <a href="/ListProduct"><li> Cài đặt</li></a>'
                 a1+='<a href="/Account"><li><i class="fas fa-user"></i> Đăng Kí</li></a><a href="/Payment"><li><i class="fas fa-money-bill"></i> Thanh Toán</li></a><a href="/Pay"><li><i class="fas fa-cart-plus"></i> Giỏ Hàng</li> </a><a href="/Login"><li><i class="fas fa-lock"></i> Đăng Nhập</li></a>'

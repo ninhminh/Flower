@@ -8,8 +8,7 @@ function add(){
             var s1 = document.getElementById('add');
             var s = '';
             for(var i=0; i<Response.length;i++){
-                s+= '<tr><td>'+ i + '</td><td>'+ Response[i].ProductName +'</td><td></td><td>'+ Response[i].Status +'</td><td>'+Response[i].Price+'</td><td class="setupproduct"><div class="editproduct"> <a href="/EditProduct/'+Response[i].id+'"> Sửa </a></div><div class="deleteproduct" onclick="xoa('+Response[i].id+')"> Xóa</div><div class="clear"></div></td></tr>'
-         
+                s+= '<tr><td>'+ (i+1) + '</td><td>'+ Response[i].ProductName +'</td><td><img src = "'+ Response[i].Imgage +'"></td><td>'+ Response[i].Status +'</td><td>'+Response[i].Price+'</td><td class="setupproduct"><div class="editproduct"> <a href="/EditProduct/'+Response[i].id+'"> Sửa </a></div><div class="deleteproduct" onclick="xoa('+Response[i].id+')"> Xóa</div><div class="clear"></div></td></tr>'
             }
             s1.innerHTML =s;
         }else{

@@ -115,6 +115,10 @@ body{
 .list__top__test a{
   display: inline-block;
 }
+.list__top__test img{
+  display: block;
+  width: 100%;
+}
 .hi{
   background-color: white;
   align-items: center;
@@ -126,4 +130,96 @@ body{
 
 .hai{
   text-align: center;
+}
+/* Phần footer */
+.footer {
+  
+  margin: auto;
+  width: 90%;
+  background-color: rgb(210, 175, 175);
+  margin-top:10px ;
+}
+
+/* Phần trên của footer */
+.footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* Các mục trong phần trên của footer */
+.footer__top__item {
+  flex: 0 0 33.33333%;
+  max-width: 33.33333%;
+}
+
+.footer__top h4 {
+  color: #444444;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.footer__top p {
+  color: #888888;
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+
+/* Các biểu tượng xã hội trong phần trên của footer */
+.footer__social-icons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__social-icons li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.footer__social-icons a {
+  color: #888888;
+  font-size: 20px;
+}
+
+/* Các liên kết hữu ích trong phần trên của footer */
+.footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__links li {
+  margin-bottom: 10px;
+}
+
+.footer__links a {
+  color: #888888;
+}
+
+/* Thông tin liên hệ trong phần trên của footer */
+.footer__contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__contact li {
+  color: #888888;
+  margin-bottom: 10px;
+}
+
+.footer__contact i {
+  margin-right: 10px;
+}
+
+/* Phần dưới của footer */
+.footer__bottom {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.footer__bottom p {
+  color: #888888;
+  font-size: 14px;
 }

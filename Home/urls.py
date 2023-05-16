@@ -15,6 +15,7 @@ Including another URLconf
 """
 from .views import  Home, Account, Contact, Login, Pay, Payment, Product, ProductDetail, Shop,ListCatalog, ListOrder, ListProduct,ListType, ListUser, AddProduct, EditProduct, EditUser,Search,Me, Pay, Cart, ChangePassword
 from django.urls import path
+from .views import image_view
 
 urlpatterns = [
    
@@ -39,4 +40,5 @@ urlpatterns = [
     path('Me', Me.as_view()),
     path('Cart',Cart.as_view()),
     path('ChangePassword', ChangePassword.as_view()),
+    path('Home/Media/<str:image_name>',image_view),
 ]

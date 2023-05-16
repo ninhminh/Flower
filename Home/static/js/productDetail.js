@@ -7,7 +7,7 @@ function detail(){
         if(xhttp.status=200){
             alert('ok');
             var s1 = document.getElementById('detail');
-            var s= '<div class="container__product__main__infor"><h1>' + Response.ProductName +'</h1><p>Mã Sản Phẩm: <span>' + Response.ProductCode + '</span></p><h2>' + Response.Price + '</h2></div><div class="container__product__main__buy"><div class="product__buy__quantily"><label for="">Số lượng: </label><input type="text" name="" id="amount"></div><div class="product__buy__button" onclick="addcart('+Response.id+')"><a><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</a></div></div>'
+            var s= '<div class="container__product__main__infor"><h1>' + Response.ProductName +'</h1><p>Mã Sản Phẩm: <span>' + Response.ProductCode + '</span></p><h2>' + Response.Price + '</h2></div><div class="container__product__main__buy"><div class="product__buy__quantily"><label for="">Số lượng: </label><input type="text" name="" id="amount"></div><div class="product__buy__button" onclick=addcart('+Response.id+')><a><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</a></div></div>'
             s1.innerHTML = s;
         }else{
 
@@ -32,7 +32,7 @@ function addcart(id) {
       if (xhttp.status == 200) {
         alert("Đã thêm vào giỏ hàng");
       } else {
-        // handle error
+        alert("Sai");
       }
     };
     const order = {

@@ -2,17 +2,26 @@
 from datetime import datetime,timedelta
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Count
 import json
+import io
+import base64
+from PIL import Image
+from django.conf import settings
+import os
 from Entity.models.Product import Product
 from Entity.models.User import User
-from Entity.models.History import History
 from Entity.models.Role import Role
 from Entity.models.UserRole import UserRole
 from Entity.models.CategoryProduct import CategoryProduct
 from Entity.models.Category import Category
-from django.db.models import Q
 from Entity.models.Order import Order
+from django.db.models import Q,F, Count
+
+
+from core.settings import BASE_DIR
+
+from django.db import connection
+from django.db.models import Sum
 
 class AllFlower(APIView):
     def get(self, request):
@@ -23,13 +32,55 @@ class AllFlower(APIView):
         return Response(flowerList, status=200)
 class FlowerHot(APIView):
     def get(self, request):
-        history = History.objects.values('Product__pk').annotate(total=Count('Product__pk')).order_by('-total')
-        flower = []
-        for i in history:
-            #print(i)
-            productQuery = Product.objects.get(pk = i['Product__pk'])
-            flower.append({"id": productQuery.pk , "ProductName":productQuery.ProductName})
-        return Response(flower, status=200)
+        thirty_days_ago = datetime.now() - timedelta(days=30)
+        
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT p.id, p.ProductName, p.ProductCode, p.Price, p.Quatily, p.Imgage, p.Status, SUM(o.Amount) AS total_sales, COUNT(o.id) AS total_quantity FROM entity_product AS p LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = "1" AND o.Date >= %s GROUP BY p.id ORDER BY total_sales DESC', [thirty_days_ago])
+
+            rows = cursor.fetchall()
+
+            data = []
+            for row in rows:
+                data.append({
+                    'id': row[0],
+                    'ProductName': row[1],
+                    'ProductCode': row[2],
+                    'price': row[3],
+                    'quantity': row[4],
+                    'img': row[5],
+                    'status': row[6],
+                    'total_sales': row[7] or 0,
+                    'total_quantity': row[8] or 0
+                })
+
+        return Response(data)
+
+class Statics(APIView):
+    def get(self, request):
+        thirty_days_ago = datetime.now() - timedelta(days=30)
+        
+        # Lấy tất cả các đơn hàng có trạng thái hoàn thành trong vòng 1 tháng trở lại đây
+        orders = Order.objects.filter(Status='1', Date__gte=thirty_days_ago)
+        
+        # Tính tổng số lượng bán được của mỗi sản phẩm
+        product_sales = orders.values('Product').annotate(total_sales=Sum('Amount')).order_by('-total_sales')
+        
+        # Lấy thông tin chi tiết của các sản phẩm trong danh sách tổng hợp
+        products = []
+        for ps in product_sales:
+            product = Product.objects.get(pk=ps['Product'])
+            products.append({
+                'id': product.pk,
+                'ProductName': product.ProductName,
+                'ProductCode': product.ProductCode,
+                'Price': product.Price,
+                'quantity': product.Quatily,
+                'img': product.Imgage,
+                'status': product.Status,
+                'total_sales': ps['total_sales']
+            })
+        
+        return Response(products)
 class Login(APIView):
     def post(self, request):
         if 'username' not in request.data:
@@ -71,7 +122,7 @@ class Signup(APIView):
 class DetailProduct(APIView):
     def get(self, request, id):
         product = Product.objects.get(pk=id)
-        productList = {"id":product.id, "ProductName":product.ProductName, "ProductCode":product.ProductCode, "Price":product.Price, "Quatily": product.Quatily}
+        productList = {"id":product.id, "ProductName":product.ProductName, "ProductCode":product.ProductCode, "Price":product.Price, "Quatily": product.Quatily, "Imgage": product.Imgage, "Status": product.Status}
         return Response(productList, status=200)
 class Update(APIView):
     def get(self, request):
@@ -91,14 +142,23 @@ class ProductByIDCategory(APIView):
         return Response(product, status=200)
 class AddProduct(APIView):
     def post(self, request):
+        images = request.data['img']
+        image = Image.open(io.BytesIO(base64.b64decode(images))) 
+        print(image)       
+        # Lưu file vào thư mục MEDIA_ROOT của Django
+        file_path = os.path.join(settings.MEDIA_ROOT, request.data['filename'])[:-4]+'(0).png'
+        check=0
+        while  os.path.isfile(file_path) :
+            check+=1
+            file_path = os.path.join(settings.MEDIA_ROOT, request.data['filename'])[:-4]+'('+str(check)+').png'
+        image.save(file_path)
         name = request.data['name']
-        img = request.data['img']
         tt = request.data['tt']
         price = request.data['price']
         code = request.data['code']
         quatily = request.data['quatily']
         #print(name, img, tt, price, code, quatily)
-        new_product = Product(ProductName = name, ProductCode = code, Quatily = quatily, Imgage = img, Price = price, Status = tt)
+        new_product = Product(ProductName = name, ProductCode = code, Imgage = file_path[len(os.path.join(BASE_DIR)):], Quatily = quatily, Price = price, Status = tt)
         new_product.save()
         return Response({'message':'thành công'}, status=200)
 class NewProduct(APIView):
@@ -142,16 +202,31 @@ class AllUser(APIView):
         for i in user:
             users.append({"id":i.pk, "UserName": i.UserName, "FullName": i.FullName, "Email": i.Email})
         return Response(users, status=200)
-class EditUser(APIView):
+class EditProduct(APIView):
     def put(self, request, id):
-        user = User.objects.get(pk=id)
-        fullname = request.data['fullname']
+        images = request.data['img']
+        image = Image.open(io.BytesIO(base64.b64decode(images))) 
+        print(image)       
+        # Lưu file vào thư mục MEDIA_ROOT của Django
+        file_path = os.path.join(settings.MEDIA_ROOT, request.data['filename'])[:-4]+'(0).png'
+        check=0
+        while  os.path.isfile(file_path) :
+            check+=1
+            file_path = os.path.join(settings.MEDIA_ROOT, request.data['filename'])[:-4]+'('+str(check)+').png'
+        image.save(file_path)
+        product = Product.objects.get(pk=id)
         name = request.data['name']
-        email = request.data['email']
-        user.FullName = fullname
-        user.UserName = name
-        user.Email = email
-        user.save()
+        code = request.data['code']
+        price = request.data['price']
+        quatity = request.data['quatily']
+        tt = request.data['tt']
+        product.ProductName= name
+        product.ProductCode= code
+        product.Price= price
+        product.Quatily = quatity
+        product.Imgage = file_path[len(os.path.join(BASE_DIR)):]
+        product.Status = tt
+        product.save()
         return Response({"message": "đã sửa"}, status=200)
 class Search(APIView):
     def get(self, request , key):
@@ -192,12 +267,24 @@ class NormalRole(APIView):
             a.append({"idRole": rows[i][0], "RoleName": rows[i][1]})
         print(a)
         return Response(a, status=200)
+class EditUser(APIView):
+    def put(self, request, id):
+        user = User.objects.get(pk=id)
+        fullname = request.data['fullname']
+        name = request.data['name']
+        email = request.data['email']
+        user.FullName = fullname
+        user.UserName = name
+        user.Email = email
+        user.save()
+        return Response({"message": "đã sửa"}, status=200)
 class AddCart(APIView):
     def post(self,request,id):
         userid = request.headers['userID']
         amount = request.data['Amount']
         product = Product.objects.get(pk=id)
         user = User.objects.get(pk=userid)
+        print(userid,amount,id)
         if not userid:
             return Response({"message": "Bạn chưa đăng nhập"}, status=401)
         try:
@@ -206,45 +293,25 @@ class AddCart(APIView):
             order.save()
         except:
             order = Order(User=user, Product=product,Amount=amount,Date= datetime.now(), Status = "0")
+            print(order)
+            print("thao")
             order.save()
-        return Response({"message": "Đã thêm vào giỏ hàng"}, status=200)      
+        return Response({"message": "Đã thêm vào giỏ hàng"}, status=200)  
 class Cart(APIView):
     def get(self, request):
         userid = request.headers['userID']
         user = User.objects.get(pk=userid)
         orders = Order.objects.all()
+        print("CartGet")
         cartList = []
         for order in orders:
             if order.User == user and order.Status == "0":
                 cartList.append({"id" : order.pk, "ProductId": order.Product.pk,  "ProductName":order.Product.ProductName, "ProductCode":order.Product.ProductCode, "Price":order.Product.Price, "Quatily":order.Product.Quatily, "Status":order.Status, "Amount":order.Amount})
         return Response(cartList, status=200)
     
-    def post(self, request):
-        userid = request.headers['userID']
-        products = json.loads(request.body)['productList']
-        user = User.objects.get(pk=userid)
-        for product in products:
-            product_id = product['product_id']
-            amount = product['amount']
-            phone = product['phone']
-            address = product['address']
-            try:
-                order = Order.objects.get(User=user, Product__pk=product_id, Status='0')
-                order.Status = "1"
-                order.Amount = amount
-                order.Phone = phone
-                order.Date=datetime.now()
-                order.Address = address
-                order.save()
-            except:
-                try:
-                    product_obj = Product.objects.get(pk=product_id)
-                except Product.DoesNotExist:
-                    return Response("Sản phẩm không tồn tại", status=400)
-                order = Order(User=user, Product=product_obj, Amount=amount, Date=datetime.now(), Status='1', Phone = phone, Address = address)
-                order.save()
-        return Response("Đặt hàng thành công", status=200)
-class OrderList(APIView):
+    
+    
+class OrderProduct(APIView):
     def get(self,request):
         
         userid = request.headers['userID']
@@ -273,6 +340,32 @@ class OrderList(APIView):
 
         # Trả về danh sách đã sắp xếp
         return Response(cartList, status=200)
+    def post(self, request):
+        userid = request.headers['userID']
+        products = json.loads(request.body)['productList']
+        user = User.objects.get(pk=userid)
+        for product in products:
+            product_id = product['product_id']
+            amount = product['amount']
+            phone = product['phone']
+            print("phone=", phone)
+            address = product['address']
+            try:
+                order = Order.objects.get(User=user, Product__pk=product_id, Status='0')
+                order.Status = "1"
+                order.Amount = amount
+                order.PhoneNumber = phone
+                order.Date=datetime.now()
+                order.Address = address
+                order.save()
+            except:
+                try:
+                    product_obj = Product.objects.get(pk=product_id)
+                except Product.DoesNotExist:
+                    return Response("Sản phẩm không tồn tại", status=400)
+                order = Order(User=user, Product=product_obj, Amount=amount, Date=datetime.now(), Status='1', PhoneNumber = phone, Address = address)
+                order.save()
+        return Response("Đặt hàng thành công", status=200)
 class Account(APIView):
     def get(self, request):
         userid = request.headers['userId']
