@@ -116,8 +116,11 @@ body{
   display: inline-block;
 }
 .list__top__test img{
-  display: block;
   width: 100%;
+  height: 240px;
+  border-radius: 5px;
+  object-fit: cover;
+  cursor: pointer;
 }
 .hi{
   background-color: white;
@@ -131,6 +134,8 @@ body{
 .hai{
   text-align: center;
 }
+
+
 /* Phần footer */
 .footer {
   

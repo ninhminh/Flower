@@ -51,16 +51,14 @@
                     <a href="/ListUser">
                         <li><i class="fas fa-user"></i> Quản lí người dùng</li>
                     </a>
-                    <a href="/ListCatalog">
-                        <li><i class="fas fa-tags"></i> Quản lí danh mục</li>
-                    </a>
+                   
                     <a href="/ListType">
                         <li><i class="fas fa-chart-bar"></i> Quản lí thể loại</li>
                     </a>
-                    <a href="/ListOrder" class="container__navbar__optionlist__selected">
+                    <a href="/ListOrder" >
                         <li><i class="fab fa-hotjar"></i> Quản lí đơn hàng</li>
                     </a>
-                    <a href="#">
+                    <a href="/Statics">
                         <li><i class="fas fa-home"></i> Thống kê</li>
                     </a>
                 </ul>
@@ -96,7 +94,7 @@
                         <thead>
                             <tr>
                                 <th>STT</th>
-                                <th>Mã SP</th>
+                                <th>Tên Sản phẩm</th>
                                 <th>Tên Khách</th>
                                 <th>Số Điện Thoại</th>
                                 <th>Tổng Thanh Toán</th>
@@ -105,14 +103,19 @@
                                 <th>Tùy Chọn</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="add">
                             <tr>
                                 <td>1</td>
                                 <td>#143</td>
                                 <td>Tường Nhi</td>
                                 <td>0379230864</td>
                                 <td>428</td>
-                                <td>pending</td>
+                                <td class="setupproduct">
+                                    <div class="editproduct" onclick="confirmOrder(this)">
+                                        xác nhận đặt
+                                    </div>
+
+                                </td>
                                 <td>pending</td>
                                 <td class="setupproduct">
                                     <div class="editproduct">
@@ -138,4 +141,5 @@
         </div>
     </div>
 </body>
+<script src="static/js/listOrder.js"></script>
 </html>

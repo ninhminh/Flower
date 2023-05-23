@@ -12,7 +12,7 @@ const xhttp = new XMLHttpRequest();
             var s1 = document.getElementById('listHot');
             var s1Html='';
             for (var i=0;i<Response.length;i++){
-                s1Html+= '<li class="hi">  <div class="list__top__test"><a href="/ProductDeltail/'+Response[i].id+'"><img src="'+ Response[i].img +'" alt=""></a></div> <div class="hai"> <h3 class="ba">'+Response[i].ProductName+'</h3></div></li>';
+                s1Html+= '<li class="hi">  <div class="list__top__test"><a href="/ProductDetail/'+Response[i].id+'"><img src="'+ Response[i].img +'" alt=""></a></div> <div class="hai"> <h3 class="ba">'+Response[i].ProductName+'</h3></div></li>';
             }
             s1.innerHTML = s1Html;
         }

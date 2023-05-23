@@ -9,7 +9,7 @@ function old(){
             
             var s1 = document.getElementById('me');
             
-            var s ='<h1>Đổi mật khẩu</h1><div id="Error"><p></p></div><form ><label for="name">Mật khẩu cũ:</label><input type="password" id="oldpass" name="" required value="'+ Response.Password +'"><label for="email">Nhập lại mật khẩu cũ:</label>	<input type="text" id="pass1" name="email" required value=""><label for="phone">Mật khẩu mới:</label><input type="text" id="newpass" name="phone" required value=""><label for="phone">Nhập lại mật khẩu mới:</label><input type="text" id="pass2" name="phone" required value=""><input type="submit"  value="Lưu thông tin" onclick="Pass()"> '
+            var s ='<h1>Đổi mật khẩu</h1><div id="Error"><p></p></div><form ><label for="name">Mật khẩu cũ:</label><input type="password" id="oldpass" name="" required value="'+ Response.Password +'"><label for="email">Nhập lại mật khẩu cũ:</label>	<input type="password" id="pass1" name="email" required value=""><label for="phone">Mật khẩu mới:</label><input type="password" id="newpass" name="phone" required value=""><label for="phone">Nhập lại mật khẩu mới:</label><input type="password" id="pass2" name="phone" required value=""><input type="submit"  value="Lưu thông tin" onclick="Pass()"> '
             s1.innerHTML = s
         }else{
 
@@ -32,9 +32,7 @@ function Pass()
     var newpass =  document.getElementById('newpass').value;
     var pass2 = document.getElementById('pass2').value;
     if( oldpass!=pass1 || newpass!=pass2){
-        var a = document.getElementById('Error')
-        var a1 = '<p>'+'Mật khẩu không khớp'+'</p>';
-        a.innerHTML = a1;
+        alert("Mật khẩu không khớp!")
 
     }else{
         

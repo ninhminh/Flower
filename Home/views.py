@@ -70,6 +70,15 @@ class ChangePassword(View):
 class History(View):
     def get(self,request):
         return render(request, "History.html")
+class Statics(View):
+    def get(self,request):
+        return render(request, "Statics.html")
+class AddCategory(View):
+    def get(self,request):
+        return render(request,'AddCategory.html')
+class EditCategory(View):
+    def get(self,request,idCategory):
+        return render(request,'EditCategory.html')
 def image_view(request, image_name):
     print("ahihi")
     # Lấy đường dẫn tới thư mục chứa các tệp hình ảnh

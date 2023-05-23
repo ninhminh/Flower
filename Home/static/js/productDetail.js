@@ -7,7 +7,14 @@ function detail(){
         if(xhttp.status=200){
             alert('ok');
             var s1 = document.getElementById('detail');
-            var s= '<div class="container__product__main__infor"><h1>' + Response.ProductName +'</h1><p>Mã Sản Phẩm: <span>' + Response.ProductCode + '</span></p><h2>' + Response.Price + '</h2></div><div class="container__product__main__buy"><div class="product__buy__quantily"><label for="">Số lượng: </label><input type="text" name="" id="amount"></div><div class="product__buy__button" onclick=addcart('+Response.id+')><a><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</a></div></div>'
+            var s = '<div class="container__product__img"><img src="'+ Response.img + '" alt=""></div>'
+            s +=  '<div class="container__product__main"><div class="container__product__main__infor">'
+            s +=  '<h1>'+ Response.ProductName +'</h1>'
+            s +=  '<p>Mã Sản Phẩm: <span>'+ Response.ProductCode +'</span></p>'
+            s +=  '<h2>'+ Response.Price +'</h2></div>'
+            s +=  '<div class="container__product__main__buy"><div class="product__buy__quantily">'
+            s +=  '<label for="">Số lượng: </label><input type="text" name="" id="amount"></div>'
+            s +=  '<div class="product__buy__button" onclick=addcart('+Response.id+')><a href=""><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</a></div></div></div>'
             s1.innerHTML = s;
         }else{
 
@@ -20,7 +27,16 @@ function detail(){
 }
 
 function addcart(id) {
-    var amount = document.getElementById("amount").value;
+
+  var amount;
+  var amountElement = document.getElementById("amount");
+  
+  if (amountElement === null || amountElement.value === "") {
+    amount = 1;
+  } else {
+    amount = amountElement.value;
+  }
+  
     const xhttp = new XMLHttpRequest();
     const userID = localStorage.getItem('userID');
 
@@ -40,7 +56,7 @@ function addcart(id) {
     };
     postOrder = JSON.stringify(order);
     // khai báo phương thức và đường dẫn để request
-    xhttp.open("POST", "/Apiv1/AddCart/"+window.location.pathname.substring(15), false);
+    xhttp.open("POST", "/Apiv1/AddCart/"+id, false);
     // định dạng gửi đi
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.setRequestHeader("userID", userID);

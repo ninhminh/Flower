@@ -20,7 +20,7 @@
 				<li><a href="/Home">Trang chủ</a></li>
 				<li><a href="/Shop">Sản phẩm</a></li>
 				<li><a href="/Cart">Giỏ hàng</a></li>
-				<li><a href="/Payment">Thanh toán</a></li>
+				<li><a href="/Cartment">Thanh toán</a></li>
 				<li> <p onclick="Logout()"> Đăng xuất</p></li>
 			</ul>
 		</nav>
@@ -28,9 +28,8 @@
 	<main>
 		<aside>
 			<ul>
-				<li><a href="#">Thông tin tài khoản</a></li>
-				<li><a href="#">Đơn hàng</a></li>
-				<li><a href="#">Sản phẩm yêu thích</a></li>
+				<li><a href="/Me">Thông tin tài khoản</a></li>
+				<li><a href="/History">Đơn hàng</a></li>
 				<li><a href="/ChangePassword" >Đổi mật khẩu</a></li>
 				<li><p onclick="Logout()">Đăng xuất</p> </li>
 			</ul>
@@ -44,14 +43,9 @@
 				<label for="email">Email:</label>
 				<input type="email" id="email" name="email" required value="">
 
-				<label for="phone">Số điện thoại:</label>
-				<input type="tel" id="phone" name="phone" required value="">
-
-				<label for="address">Địa chỉ:</label>
-				<textarea id="address" name="address"></textarea>
-
 				<input type="submit"  value="Lưu thông tin" onclick=""> 
 			</form>
+			
 		</section>
 	</main>
 	<footer>

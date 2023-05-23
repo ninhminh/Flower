@@ -16,7 +16,7 @@ function THAO(){
 
             s += '<label for="quatily" id="quatily1">Quantity:</label><input type="number" id="quatily" name="quatily" value="'+ Response.Quantily + '"><br><br>'
 
-            s += ' <img src = "'+ Response.Imgage +'"><label for="img" id="img1">Ảnh:</label><input type="file" id="img"><br><br><br>'    
+            s += ' <img src = "'+ Response.img +'"><label for="img" id="img1"><br><br>Đổi ảnh:</label><input type="file" id="img"><br><br><br>'    
         
             s += '<label for="status" id="status1">Trạng Thái:</label><input type="text" id="status" name="status" value="'+Response.Status+'"><br><br>'
         
@@ -93,3 +93,4 @@ function EditProduct()
  
         
 }
+

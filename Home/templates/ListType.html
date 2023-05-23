@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <link rel="stylesheet" href="static/css/ListType.css">
+    <link rel="stylesheet" href="static/css/ListCatalog.css">
 </head>
 <body>
     <div id="header">
@@ -28,7 +28,7 @@
         <div class="container__navbar">
             <div class="container__navbar__user">
                 <div class="container__navbar__user__img">
-                    <a href="/Home"><img src="Static/img/logoandbanner/logo.jpg" alt=""></a>
+                    <a href="/Home"> <img src="static/img/logoandbanner/logo.jpg" alt=""> </a>
                 </div>
                 <div class="container__navbar__user__infor">
                    <h1>Admin</h1>
@@ -39,9 +39,9 @@
             </div>
             <div class="container__navbar__search">
                 <form action="">
-                    <input type="text" placeholder="Tìm Kiếm.." name="search"  id="find" onkeyup="search()">
+                    <input type="text" placeholder="Tìm Kiếm.." name="search" id="find" onkeyup="search()">
                     <button type="submit"><i class="fa fa-search"></i></button>
-                  </form>
+                </form>
             </div>
             <div class="container__navbar__optionlist">
                 <ul>
@@ -51,16 +51,13 @@
                     <a href="/ListUser">
                         <li><i class="fas fa-user"></i> Quản lí người dùng</li>
                     </a>
-                    <a href="/ListCatalog">
-                        <li><i class="fas fa-tags"></i> Quản lí danh mục</li>
-                    </a>
-                    <a href="/ListType"  class="container__navbar__optionlist__selected">
+                    <a href="/ListType" class="container__navbar__optionlist__selected">
                         <li><i class="fas fa-chart-bar"></i> Quản lí thể loại</li>
                     </a>
-                    <a href="/ListOrder">
+                    <a href="/ListOrder" >
                         <li><i class="fab fa-hotjar"></i> Quản lí đơn hàng</li>
                     </a>
-                    <a href="#">
+                    <a href="/Statics">
                         <li><i class="fas fa-home"></i> Thống kê</li>
                     </a>
                 </ul>
@@ -91,61 +88,21 @@
                     <div class="clear">
                     </div>
                 </div>
-                <div class="container__content__optionbody__table">                 
+                <div class="container__content__optionbody__table" id = "categories">
                     <table id="table__productlist">
                         <thead>
                             <tr>
                                 <th>STT</th>
-                                <th>Kiểu dáng</th>
+                                <th>Tên Thể loại</th>
+                                <th>Trạng thái Danh mục</th>
                                 <th>Tùy chọn</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td><a href="/html/ListProduct/ListProductByType/ListProductByBoHoa.html">Bó</a></td>
-                                <td class="setupproduct">
-                                    <div class="editproduct">
-                                        Sửa
-                                    </div>
-                                    <div class="deleteproduct">
-                                        Xóa
-                                    </div>
-                                    <div class="clear">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><a href="/html/ListProduct/ListProductByType/ListProductByGioHoa.html">Giỏ</a></td>
-                                <td class="setupproduct">
-                                    <div class="editproduct">
-                                        Sửa
-                                    </div>
-                                    <div class="deleteproduct">
-                                        Xóa
-                                    </div>
-                                    <div class="clear">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td><a href="/html/ListProduct/ListProductByType/ListProductByLangHoa.html">Lãng</a></td>
-                                <td class="setupproduct">
-                                    <div class="editproduct">
-                                        Sửa
-                                    </div>
-                                    <div class="deleteproduct">
-                                        Xóa
-                                    </div>
-                                    <div class="clear">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td><a href="/html/ListProduct/ListProductByType/ListProductByBinhHoa.html">Bát(Bình)</a></td>
+                                <td><a href="/html/ListProduct/ListProductByCatalog/ListProductByHoaSuKien.html">Hoa sự kiện</a></td>
+                                <td>1</td>
                                 <td class="setupproduct">
                                     <div class="editproduct">
                                         Sửa
@@ -160,10 +117,16 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="AddCategory">
+                    <div class="AddCategory__Add">
+                        <a href="/AddCategory" >Thêm Thể Loại</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="clear">
         </div>
     </div>
 </body>
+<script src="/static/js/listType.js"></script>
 </html>

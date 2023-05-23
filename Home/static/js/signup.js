@@ -1,6 +1,6 @@
 function Signup()
 {
-    //alert("tuan cho");
+    alert("tuan cho");
     const xhttp = new XMLHttpRequest();
     var username = document.getElementById('username').value;
     var fullname = document.getElementById('fullname').value;
@@ -17,6 +17,7 @@ function Signup()
         xhttp.onload = function()
             {
                 //lấy dữ liệu dạng json
+                alert("ok")
                 var ResponseJson=xhttp.responseText
                 //chuyển về dữ liệU javascript
                 var Response= JSON.parse(ResponseJson)

@@ -15,14 +15,14 @@
                 <img src="/static/img/logoandbanner/logo.jpg" alt="">
             </div>
             <div class="header__navbar">
-                <ul>
+                <ul id="role1">
                     <a href="/Account">
                         <li><i class="fas fa-user"></i> Đăng Kí</li>
                     </a>
-                    <a href="/Payment">
+                    <a href="/Cartment">
                         <li><i class="fas fa-money-bill"></i> Thanh Toán</li>
                     </a>
-                    <a href="/Pay">
+                    <a href="/Cart">
                         <li><i class="fas fa-cart-plus"></i> Giỏ Hàng</li>
                     </a>
                     <a href="/Login">
@@ -34,7 +34,7 @@
             </div>
             <div class="header__nav">
                 <div class="header__nav__option">
-                    <ul>
+                    <ul id="role">
                         <a href="/Home">
                             <li>Trang chủ</li>
                         </a>
@@ -46,14 +46,14 @@
                         </a>
                     </ul>
                 </div>
-                <div class="header__nav__search">
-                    <form action="">
-                        <input type="text" placeholder="Tìm Kiếm.." name="search">
+                <div class="header__nav__search" >
+                    <div action="" onkeyup="search()">
+                        <input type="text" placeholder="Tìm Kiếm.." name="search" id="find" >
                         <button type="submit"><i class="fa fa-search"></i></button>
-                    </form>
+                    </div>
                 </div>
-                <div class="clear">
-                </div>
+                    <div class="clear">
+                    </div>
             </div>
         </div>
         <div class="header__footer">
@@ -107,7 +107,7 @@
                 <div class="product__inforproduct">
                     <h1>  </h1>
                     <p>   </p>
-                    <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
+                    <div class="addtocart"><a href="/Cart"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                 <div class="product__inforproduct">
                     <h1>   </h1>
                     <p>    </p>
-                    <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
+                    <div class="addtocart"><a href="/Cart"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
@@ -135,7 +135,7 @@
                 <div class="product__inforproduct">
                     <h1>   </h1>
                     <p>    </p>
-                    <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
+                    <div class="addtocart"><a href="/Cart"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
@@ -148,7 +148,7 @@
                 <div class="product__inforproduct">
                     <h1>    </h1>
                     <p>     </p>
-                    <div class="addtocart"><a href="/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
+                    <div class="addtocart"><a href="/Cart"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
@@ -162,7 +162,7 @@
                 <div class="product__inforproduct">
                     <h1>   </h1>
                     <p>    </p>
-                    <div class="addtocart"><a href="static/Pay"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
+                    <div class="addtocart"><a href="static/Cart"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
@@ -176,7 +176,7 @@
                 <div class="product__inforproduct">
                     <h1>   </h1>
                     <p>    </p>
-                    <div class="addtocart"><a href="/Payment"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
+                    <div class="addtocart"><a href="/Cartment"> <i class="fas fa-cart-plus"></i> Thêm vào giỏi hàng
                     </a></div>
                 </div>
             </div>
@@ -185,4 +185,5 @@
 </body>
 <script src="/static/js/search.js"></script>
 <script src="/static/js/base.js"></script>
+<script src="/static/js/logout.js"></script>
 </html>

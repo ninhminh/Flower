@@ -33,7 +33,6 @@ class AllFlower(APIView):
 class FlowerHot(APIView):
     def get(self, request):
         thirty_days_ago = datetime.now() - timedelta(days=30)
-        
         with connection.cursor() as cursor:
             cursor.execute('SELECT p.id, p.ProductName, p.ProductCode, p.Price, p.Quatily, p.Imgage, p.Status, SUM(o.Amount) AS total_sales, COUNT(o.id) AS total_quantity FROM entity_product AS p LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = "1" AND o.Date >= %s GROUP BY p.id ORDER BY total_sales DESC', [thirty_days_ago])
 
@@ -58,29 +57,58 @@ class FlowerHot(APIView):
 class Statics(APIView):
     def get(self, request):
         thirty_days_ago = datetime.now() - timedelta(days=30)
-        
-        # Lấy tất cả các đơn hàng có trạng thái hoàn thành trong vòng 1 tháng trở lại đây
-        orders = Order.objects.filter(Status='1', Date__gte=thirty_days_ago)
-        
-        # Tính tổng số lượng bán được của mỗi sản phẩm
-        product_sales = orders.values('Product').annotate(total_sales=Sum('Amount')).order_by('-total_sales')
-        
-        # Lấy thông tin chi tiết của các sản phẩm trong danh sách tổng hợp
-        products = []
-        for ps in product_sales:
-            product = Product.objects.get(pk=ps['Product'])
-            products.append({
-                'id': product.pk,
-                'ProductName': product.ProductName,
-                'ProductCode': product.ProductCode,
-                'Price': product.Price,
-                'quantity': product.Quatily,
-                'img': product.Imgage,
-                'status': product.Status,
-                'total_sales': ps['total_sales']
-            })
-        
-        return Response(products)
+        sixty_days_ago = datetime.now() - timedelta(days=60)
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                '''
+                SELECT p.id, p.ProductName, p.ProductCode, p.Price, p.Quatily, p.Imgage, p.Status,
+                SUM(o.Amount) AS total_sales, COUNT(o.id) AS total_quantity
+                FROM entity_product AS p
+                LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = '1' AND o.Date >= %s
+                GROUP BY p.id
+                ORDER BY p.id DESC
+                ''',
+                [thirty_days_ago]
+            )
+
+            rows = cursor.fetchall()
+
+            cursor.execute(
+                '''
+                SELECT p.id, SUM(o.Amount) AS total_sales_2_months_ago, COUNT(o.id) AS total_quantity
+                FROM entity_product AS p
+                LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = '1' AND o.Date >= %s
+                GROUP BY p.id
+                ORDER BY p.id DESC
+                ''',
+                [sixty_days_ago]
+            )
+
+            rows_2_months_ago = cursor.fetchall()
+
+            data = []
+            for i in range(len(rows)):
+                row = rows[i]
+                row_2_months_ago = rows_2_months_ago[i] if i < len(rows_2_months_ago) else None
+                decrease = (row[7] or 0) - ((row_2_months_ago[1] or 0) - (row[7] or 0))
+
+                data.append({
+                    'id': row[0],
+                    'ProductName': row[1],
+                    'ProductCode': row[2],
+                    'price': row[3],
+                    'quantity': row[4],
+                    'img': row[5],
+                    'status': row[6],
+                    'total_sales': row[7] or 0,
+                    'decrease': decrease,
+                    'total_quantity': row[8] or 0
+                })
+        data_sorted = sorted(data, key=lambda x: x['total_sales'], reverse=True)
+
+        return Response(data_sorted)
+
 class Login(APIView):
     def post(self, request):
         if 'username' not in request.data:
@@ -122,7 +150,7 @@ class Signup(APIView):
 class DetailProduct(APIView):
     def get(self, request, id):
         product = Product.objects.get(pk=id)
-        productList = {"id":product.id, "ProductName":product.ProductName, "ProductCode":product.ProductCode, "Price":product.Price, "Quatily": product.Quatily, "Imgage": product.Imgage, "Status": product.Status}
+        productList = {"id":product.id, "ProductName":product.ProductName, "ProductCode":product.ProductCode, "Price":product.Price, "Quatily": product.Quatily, "img": product.Imgage, "Status": product.Status}
         return Response(productList, status=200)
 class Update(APIView):
     def get(self, request):
@@ -131,18 +159,19 @@ class Update(APIView):
         productList = []
         for i in products:
 
-            productList.append({"id":i.pk, "ProductName":i.ProductName, "ProductCode": i.ProductCode, "Price":i.Price})
+            productList.append({"id":i.pk, "ProductName":i.ProductName, "ProductCode": i.ProductCode, "Price":i.Price, "img":i.Imgage})
         return Response(productList, status=200)
 class ProductByIDCategory(APIView):
     def get(self, request, CategoryID):
         productQuery = CategoryProduct.objects.filter(Category__pk=CategoryID)
         product = []
         for i in productQuery:
-            product.append({"idCategory":i.Category.id, "idProduct":i.Product.id, "CategoryName": i.Category.CategoryName, "ProductName":i.Product.ProductName})
+            product.append({"idCategory":i.Category.id, "idProduct":i.Product.id, "CategoryName": i.Category.CategoryName, "ProductName":i.Product.ProductName, "img": i.Product.Imgage, "Price": i.Product.Price})
         return Response(product, status=200)
 class AddProduct(APIView):
     def post(self, request):
         images = request.data['img']
+        print(type( request.data['listCategory']))
         image = Image.open(io.BytesIO(base64.b64decode(images))) 
         print(image)       
         # Lưu file vào thư mục MEDIA_ROOT của Django
@@ -157,10 +186,17 @@ class AddProduct(APIView):
         price = request.data['price']
         code = request.data['code']
         quatily = request.data['quatily']
+        
         #print(name, img, tt, price, code, quatily)
         new_product = Product(ProductName = name, ProductCode = code, Imgage = file_path[len(os.path.join(BASE_DIR)):], Quatily = quatily, Price = price, Status = tt)
+        
         new_product.save()
+        for i in   request.data['listCategory']:
+         category= Category.objects.get(pk=int(i))
+         new_categoryproduct = CategoryProduct(Category=category,Product=new_product)
+         new_categoryproduct.save()
         return Response({'message':'thành công'}, status=200)
+    
 class NewProduct(APIView):
     def get(self, request):
         product = Product.objects.all()
@@ -202,6 +238,36 @@ class AllUser(APIView):
         for i in user:
             users.append({"id":i.pk, "UserName": i.UserName, "FullName": i.FullName, "Email": i.Email})
         return Response(users, status=200)
+class ListOrder(APIView):
+    def get(self, request):
+        orders = Order.objects.all()
+        order_list = []
+        for order in orders:
+            order_list.append({
+                "id": order.id,
+                "User": order.User.UserName,
+                "Product": order.Product.ProductName,
+                "Date": order.Date,
+                "Status": order.Status,
+                "Amount": order.Amount,
+                "Address": order.Address,
+                "PhoneNumber": order.PhoneNumber
+            })
+        return Response(order_list, status=200)
+class UpdateStatus(APIView):
+    def put(self, request, id):
+        
+        order = Order.objects.get(pk=id)
+            
+        order.Status = 'Đã Xác Nhận'  # Thay đổi trạng thái thành 3
+        order.save()
+        return Response({"message":"ok"},status=200)
+        
+class DeleteOrder(APIView):
+    def delete(self, request, id):
+        order = Order.objects.get(pk=id)
+        order.delete()
+        return Response({"message": "đã xóa"}, status=200)
 class EditProduct(APIView):
     def put(self, request, id):
         images = request.data['img']
@@ -288,11 +354,11 @@ class AddCart(APIView):
         if not userid:
             return Response({"message": "Bạn chưa đăng nhập"}, status=401)
         try:
-            order = Order.objects.get(User_id=user.pk, Product_id=product.pk, Status = "0")
+            order = Order.objects.get(User_id=user.pk, Product_id=product.pk, Status = "Giỏ Hàng")
             order.Amount += int(amount)
             order.save()
         except:
-            order = Order(User=user, Product=product,Amount=amount,Date= datetime.now(), Status = "0")
+            order = Order(User=user, Product=product,Amount=amount,Date= datetime.now(), Status = "Giỏ Hàng")
             print(order)
             print("thao")
             order.save()
@@ -305,12 +371,9 @@ class Cart(APIView):
         print("CartGet")
         cartList = []
         for order in orders:
-            if order.User == user and order.Status == "0":
+            if order.User == user and order.Status == "Giỏ Hàng":
                 cartList.append({"id" : order.pk, "ProductId": order.Product.pk,  "ProductName":order.Product.ProductName, "ProductCode":order.Product.ProductCode, "Price":order.Product.Price, "Quatily":order.Product.Quatily, "Status":order.Status, "Amount":order.Amount})
-        return Response(cartList, status=200)
-    
-    
-    
+        return Response(cartList, status=200)  
 class OrderProduct(APIView):
     def get(self,request):
         
@@ -318,7 +381,7 @@ class OrderProduct(APIView):
         user = User.objects.get(pk=userid)
         orders = Order.objects.all()
         # Lọc các đơn hàng của user có status là 1
-        user_orders = [order for order in orders if order.User == user and order.Status == "1"]
+        user_orders = [order for order in orders if order.User == user and (order.Status == "Chờ Xác Nhận" or order.Status == "Đã Xác Nhận")]
 
         # Sắp xếp theo ngày đặt hàng (ngày gần nhất đến xa nhất)
         sorted_orders = sorted(user_orders, key=lambda x: x.Date, reverse=True)
@@ -330,6 +393,7 @@ class OrderProduct(APIView):
                 "id": order.pk,
                 "ProductId": order.Product.pk,
                 "ProductName": order.Product.ProductName,
+                'img': order.Product.Imgage,
                 "ProductCode": order.Product.ProductCode,
                 "Price": order.Product.Price,
                 "Quatily": order.Product.Quatily,
@@ -351,8 +415,8 @@ class OrderProduct(APIView):
             print("phone=", phone)
             address = product['address']
             try:
-                order = Order.objects.get(User=user, Product__pk=product_id, Status='0')
-                order.Status = "1"
+                order = Order.objects.get(User=user, Product__pk=product_id, Status='Giỏ Hàng')
+                order.Status = "Chờ Xác Nhận"
                 order.Amount = amount
                 order.PhoneNumber = phone
                 order.Date=datetime.now()
@@ -363,23 +427,29 @@ class OrderProduct(APIView):
                     product_obj = Product.objects.get(pk=product_id)
                 except Product.DoesNotExist:
                     return Response("Sản phẩm không tồn tại", status=400)
-                order = Order(User=user, Product=product_obj, Amount=amount, Date=datetime.now(), Status='1', PhoneNumber = phone, Address = address)
+                order = Order(User=user, Product=product_obj, Amount=amount, Date=datetime.now(), Status='Chờ Xác Nhận', PhoneNumber = phone, Address = address)
                 order.save()
         return Response("Đặt hàng thành công", status=200)
+    
+    def delete(self, request, id):
+        order = Order.objects.get(pk=id)
+        order.delete()
+        return Response({"message": "đã xóa"}, status=200)
 class Account(APIView):
     def get(self, request):
         userid = request.headers['userId']
         user = User.objects.get(pk=userid)
         userQuery = {"id": user.id, "UserName": user.UserName, "FullName": user.FullName, "Email": user.Email, "Password" : user.Password}
         return Response(userQuery, status=200)
-    def put(self, request, id):
-        user = User.objects.get(pk=id)
+    def put(self, request):
+        userid = request.headers['userId']
+        user = User.objects.get(pk=userid)
         name = request.data['name']
         email = request.data['email']
-        password = request.data['password']
+
         user.FullName = name
         user.Email = email
-        user.Password = password
+        
         user.save()
         return Response({"message": "đã sửa"}, status=200)
 class Password(APIView):
@@ -395,3 +465,132 @@ class Logout(APIView):
         # Xóa session của người dùng để đăng xuất
         request.session.flush()
         return Response({"message": "Đăng xuất thành công"}, status=200)
+
+class CategoryAPI(APIView):
+    def post(self, request):
+        name = request.data.get('categoryName')
+        parent_id = request.data.get('parent_id')
+        
+        parent_category = None
+        if parent_id:
+            try:
+                parent_category = Category.objects.get(id=parent_id)
+            except Category.DoesNotExist:
+                return Response({'error': 'Parent category does not exist.'}, status=400)
+        
+        category = Category.objects.create(CategoryName=name, parent=parent_category)
+        return Response({'id': category.id, 'name': category.CategoryName, 'parent_id': category.parent_id}, status=201)
+
+    def get(self, request):
+        categories = Category.objects.filter(parent_id=None)
+        listCategory=[]
+        def categoriesRelation(categories,listparent):
+            for category in categories:            
+                childrenCategory= Category.objects.filter(parent_id=category.pk)
+                if(childrenCategory):
+                    parent=[]
+                    listparent.append({"id":category.id,"CategoryName":category.CategoryName ,"parent":parent})
+                    categoriesRelation(childrenCategory,parent)
+                else:
+                    listparent.append({"id":category.id,"CategoryName":category.CategoryName})
+        categoriesRelation(categories,listCategory)
+        return Response(listCategory, status=200)
+
+class CategoryAPIByID(APIView):
+    def get(self,request,id):
+        category =Category.objects.get(pk=id)
+        categoryParent =category.parent
+        if category.parent != None:
+            categoryParent=category.parent.id
+        return Response({"id":category.id,"CategoryName":category.CategoryName,"CategoryParent":categoryParent},status=200)
+    def patch(self, request, id):
+        name = request.data.get('categoryName')
+        parent_id = request.data.get('parent_id')
+        
+        try:
+            category = Category.objects.get(id=id)
+        except Category.DoesNotExist:
+            return Response({'error': 'Category does not exist.'}, status=404)
+        
+        if name:
+            category.CategoryName = name
+        if parent_id == None:
+               
+                category.parent = None
+        if parent_id:
+            
+            try:
+                parent_category = Category.objects.get(id=parent_id)
+                category.parent = parent_category
+            except Category.DoesNotExist:
+                return Response({'error': 'Parent category does not exist.'}, status=400)
+           
+        
+        category.save()
+        return Response({'id': category.id, 'name': category.CategoryName, 'parent_id': category.parent_id})
+
+    
+    def delete(self, request, id):
+        try:
+            category = Category.objects.get(id=id)
+        except Category.DoesNotExist:
+            return Response({'error': 'Category does not exist.'}, status=404)
+        
+       
+        category.delete()
+        return Response({'message': 'Category deleted successfully.'},status=204)
+        
+class ProductByCategory(APIView):
+    def get(self, request, category_id):
+        category_products = CategoryProduct.objects.filter(Category_id=category_id)
+            
+            # Lấy danh sách các sản phẩm
+        product_ids = category_products.values_list('Product_id', flat=True)
+        products = Product.objects.filter(id__in=product_ids)
+        
+        # Tạo danh sách kết quả
+        result = []
+        for product in products:
+            product_data = {
+                'id': product.pk,
+                'ProductName': product.ProductName,
+                'ProductCode': product.ProductCode,
+                'Price': product.Price,
+                'Quatily': product.Quatily,
+                'Imgage': product.Imgage,
+                'Status': product.Status
+            }
+            result.append(product_data)
+        
+        return Response(result, status=200)
+class Recommend(APIView):
+    def get(self, request):
+        userid = request.headers['userId']
+        user = User.objects.get(pk=userid) 
+        hoa = Order.objects.filter(User=user)
+        if(len(hoa)==0):
+            thirty_days_ago = datetime.now() - timedelta(days=30)
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT p.id, p.ProductName, p.ProductCode, p.Price, p.Quatily, p.Imgage, p.Status, SUM(o.Amount) AS total_sales, COUNT(o.id) AS total_quantity FROM entity_product AS p LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = "1" AND o.Date >= %s GROUP BY p.id ORDER BY total_sales DESC', [thirty_days_ago])
+                rows = cursor.fetchall()
+                data = []
+                for row in rows:
+                    data.append({
+                        'id': row[0],
+                        'ProductName': row[1],
+                        'ProductCode': row[2],
+                        'price': row[3],
+                        'quantity': row[4],
+                        'img': row[5],
+                        'status': row[6],
+                        'total_sales': row[7] or 0,
+                        'total_quantity': row[8] or 0
+                    })
+
+            return Response(data)
+    def get_smallest_categories(request):
+        smallest_categories = Category.objects.exclude(children__isnull=False).values('id', 'CategoryName')
+        return Response(list(smallest_categories), safe=False)
+        
+
+        

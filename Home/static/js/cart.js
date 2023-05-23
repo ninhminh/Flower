@@ -1,4 +1,5 @@
 cart();
+update()
 function cart() {
     const xhttp = new XMLHttpRequest();
     var userID = localStorage.getItem('userID');
@@ -14,8 +15,8 @@ function cart() {
 
                 serverListHTML += '<tr> <th class = "hide">' + Response[i].ProductId + '</th> <th>' + (i + 1)
                 serverListHTML += '</th> <th>' +   Response[i].ProductName
-                serverListHTML += '</th><th>' + Response[i].Price + '</th><th><input type="number" value="'
-                serverListHTML += Response[i].Amount + '" min="1" class="quantity" onchange="updateTotalPrice(this)"></th><th class="total-price"></th><td class="setupproduct"><input type="checkbox" name="example-checkbox" checked></div> </td></tr>';
+                serverListHTML += '</th><th>' + Response[i].Price + '</th><th><input type="number" id = "amount" value="'
+                serverListHTML += Response[i].Amount + '" min="1" class="quantity" id = "quantity" onchange="updateTotalPrice(this)"></th><th class="total-price" onchange="update()"></th><td class="setupproduct"><input type="checkbox" name="example-checkbox" checked></div> </td></tr>';
             }
             serverListElement.innerHTML = serverListHTML;
         } else {
@@ -36,8 +37,20 @@ function updateTotalPrice(input) {
     var quantity = parseInt(input.value);
     var totalPrice = unitPrice * quantity;
     row.getElementsByClassName('total-price')[0].textContent = totalPrice;
+    update()
 }
+function update(){
+    var total = 0;
+    var checkboxes = document.querySelectorAll('input[type=checkbox][name=example-checkbox]:checked');
 
+    for (var i = 0; i < checkboxes.length; i++) {
+        var row = checkboxes[i].closest('tr');
+        var unitPrice = parseFloat(row.getElementsByTagName('th')[3].textContent);
+        var quantity = parseInt(row.querySelector('input[type=number].quantity').value);
+        total += (unitPrice*quantity)
+    }
+    document.getElementById('total').value = total;
+}
 function order() {
     // Get the list of selected products
     var productList = [];

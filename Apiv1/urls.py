@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AllFlower, FlowerHot, Login, Signup, DetailProduct, Update, ProductByIDCategory,AddProduct, NewProduct, Delete, EditProduct, DeleteUser, AllUser, EditUser, Search, Pay, ListRole, NormalRole,Cart, Account, Password, Logout, OrderProduct, AddCart, Statics
+from .views import AllFlower, FlowerHot, Login, Signup, DetailProduct, Update, ProductByIDCategory,AddProduct, NewProduct, Delete, EditProduct, DeleteUser, AllUser, EditUser, Search, Pay, ListRole, NormalRole,Cart, Account, Password, Logout, OrderProduct, AddCart, Statics, CategoryAPI, ProductByCategory,CategoryAPIByID, Recommend, ListOrder, UpdateStatus, DeleteOrder
 
 
 urlpatterns = {
@@ -27,5 +27,13 @@ urlpatterns = {
     path('Password', Password.as_view()),
     path('Logout', Logout.as_view()), 
     path('Order', OrderProduct.as_view()),
+    path('Order/<int:id>', OrderProduct.as_view()),
     path('Statics', Statics.as_view()),
+    path('Category', CategoryAPI.as_view()),
+    path('Category/<int:id>', CategoryAPIByID.as_view()),
+    path('ProductByCategory/<int:category_id>', ProductByCategory.as_view()),
+    path('Recommend', Recommend.as_view()),
+    path('ListOrder', ListOrder.as_view()),
+    path('UpdateStatus/<int:id>', UpdateStatus.as_view()),
+    path('DeleteOrder/<int:id>', DeleteOrder.as_view()),
 }

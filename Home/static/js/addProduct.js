@@ -37,6 +37,12 @@ function AddProduct() {
 
             }
         }
+        var listCategory=[]
+        var listCategoryElement=document.querySelectorAll(".CategoryDetail");
+        listCategoryElement.forEach(category => {
+          listCategory.push(category.getAttribute("value"));
+        });
+        console.log(listCategory);
         const productInfo = {
             name: name,
             code: code,
@@ -45,6 +51,7 @@ function AddProduct() {
             img: base64String,
             tt: status,
             filename: file.name,
+            listCategory:listCategory
         }
         postProduct = JSON.stringify(productInfo);
         //khai báo phương thức và đường dẫn để request
@@ -58,3 +65,75 @@ function AddProduct() {
     reader.readAsDataURL(file);
 
 }
+var inputFile=document.querySelector('.input-file');
+
+    inputFile.onchange = function(event) {
+    let file = event.target.files[0];
+    let blobURL = URL.createObjectURL(file);
+    inputFile.previousElementSibling.src = blobURL;
+};
+function flattenCategories(categoriesList) {
+    const flattenedList = [];
+  
+    function flatten(category) {
+      if (!category.parent || category.parent.length === 0) {
+        flattenedList.push(category);
+      } else {
+        category.parent.forEach(childCategory => flatten(childCategory));
+      }
+    }
+  
+    categoriesList.forEach(category => flatten(category));
+    return flattenedList;
+  }
+  
+
+  
+categories();
+function categories() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function () {
+        var ResponseJson = xhttp.responseText
+        var Response = JSON.parse(ResponseJson)
+        console.log(Response)
+        if (xhttp.status = 200) {
+            const flattenedCategories = flattenCategories(Response);
+            var categoriesHtml='<option value="">----</option>';
+            var categoriesElement= document.getElementById("Category");
+            for(var i=0;i<flattenedCategories.length;i++){
+                 categoriesHtml+='<option value="'+flattenedCategories[i].id+'">'+flattenedCategories[i].CategoryName+'</option>';
+            }
+            categoriesElement.innerHTML=categoriesHtml;
+        } else {
+
+        }
+
+    }
+    xhttp.open("GET", "/Apiv1/Category", false);
+    xhttp.setRequestHeader("Content-type", "application/json")
+    xhttp.send();
+}
+
+
+var listCategorySelect=[];
+var CategoryElement =document.getElementById("Category");
+var CategoryListElement =document.getElementById('CategoryList');
+var CategorySelectFilmsElement = document.querySelectorAll('#Category option');
+
+var CategoryFilmsElement = document.querySelectorAll('.CategoryDetail');
+
+  CategoryElement.addEventListener("change", function() {
+
+    // Lấy tham chiếu đến phần tử option được chọn
+    var selectedOption = this.options[this.selectedIndex];
+  
+    // Xóa phần tử option được chọn khỏi DOM
+    
+    CategoryListElement.insertAdjacentHTML("beforeend", ' <div class="CategoryDetail" value="'+selectedOption.value+'">'+selectedOption.innerHTML+'</div>');
+    var CategoryFilmsElementx = document.querySelectorAll('.CategoryDetail');
+    CategoryFilmsElementx[CategoryFilmsElementx.length-1].addEventListener("click",()=>{
+        CategoryElement.insertAdjacentHTML("beforeend", ' <option value="'+CategoryFilmsElementx[CategoryFilmsElementx.length-1].getAttribute("value")+'">'+CategoryFilmsElementx[CategoryFilmsElementx.length-1].innerHTML+'</option>');
+        CategoryFilmsElementx[CategoryFilmsElementx.length-1].remove();
+        })
+    selectedOption.remove();
+  });

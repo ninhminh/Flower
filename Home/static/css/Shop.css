@@ -105,11 +105,11 @@ body{
 .container__optionby ul{
     list-style: none;
 }
-.container__optionby ul a{
-    text-decoration: none;
+.container__optionby ul div{
+  
 
 }
-.container__optionby ul a li{
+.container__optionby ul div li{
     color: black;
     margin-bottom: 10px;
     font-size: 20px;
