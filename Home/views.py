@@ -79,6 +79,9 @@ class AddCategory(View):
 class EditCategory(View):
     def get(self,request,idCategory):
         return render(request,'EditCategory.html')
+class EditOrder(View):
+    def get(self, request, id):
+        return render(request, 'EditOrder.html')
 def image_view(request, image_name):
     print("ahihi")
     # Lấy đường dẫn tới thư mục chứa các tệp hình ảnh

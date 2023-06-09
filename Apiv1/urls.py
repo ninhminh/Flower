@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AllFlower, FlowerHot, Login, Signup, DetailProduct, Update, ProductByIDCategory,AddProduct, NewProduct, Delete, EditProduct, DeleteUser, AllUser, EditUser, Search, Pay, ListRole, NormalRole,Cart, Account, Password, Logout, OrderProduct, AddCart, Statics, CategoryAPI, ProductByCategory,CategoryAPIByID, Recommend, ListOrder, UpdateStatus, DeleteOrder
+from .views import AllFlower, FlowerHot, Login, Signup, DetailProduct, Update, ProductByIDCategory,AddProduct, NewProduct, Delete, EditProduct, DeleteUser, AllUser, EditUser, Search, Pay, ListRole, NormalRole,Cart, Account, Password, Logout, OrderProduct, AddCart, Statics, CategoryAPI, ProductByCategory,CategoryAPIByID, ListOrder, UpdateStatus, DeleteOrder, EditOrder
 
 
 urlpatterns = {
@@ -32,8 +32,9 @@ urlpatterns = {
     path('Category', CategoryAPI.as_view()),
     path('Category/<int:id>', CategoryAPIByID.as_view()),
     path('ProductByCategory/<int:category_id>', ProductByCategory.as_view()),
-    path('Recommend', Recommend.as_view()),
+    # path('Recommend', Recommend.as_view()),
     path('ListOrder', ListOrder.as_view()),
     path('UpdateStatus/<int:id>', UpdateStatus.as_view()),
     path('DeleteOrder/<int:id>', DeleteOrder.as_view()),
+    path('EditOrder/<int:id>', EditOrder.as_view()),
 }

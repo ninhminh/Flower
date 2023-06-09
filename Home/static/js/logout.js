@@ -1,6 +1,6 @@
 function Logout()
 {
-    alert("tuan cho");
+    // alert("tuan cho");
     const xhttp = new XMLHttpRequest();
     
     xhttp.onload = function()
@@ -12,7 +12,7 @@ function Logout()
             if(xhttp.status==200)
             {
                 //vứi status =201 thành công
-                alert("ok")
+                // alert("ok")
                 localStorage.clear();
                 window.location = "/Login";
                 

@@ -8,6 +8,7 @@ import base64
 from PIL import Image
 from django.conf import settings
 import os
+# import numpy as np
 from Entity.models.Product import Product
 from Entity.models.User import User
 from Entity.models.Role import Role
@@ -251,7 +252,8 @@ class ListOrder(APIView):
                 "Status": order.Status,
                 "Amount": order.Amount,
                 "Address": order.Address,
-                "PhoneNumber": order.PhoneNumber
+                "PhoneNumber": order.PhoneNumber,
+                "Price": order.Product.Price
             })
         return Response(order_list, status=200)
 class UpdateStatus(APIView):
@@ -268,6 +270,15 @@ class DeleteOrder(APIView):
         order = Order.objects.get(pk=id)
         order.delete()
         return Response({"message": "đã xóa"}, status=200)
+class EditOrder(APIView):
+    def put(self, request, id):
+        order = Order.objects.get(pk=id)
+        Phone = request.data['Phone']
+        Address = request.data['Address']
+        order.PhoneNumber = Phone
+        order.Address = Address
+        order.save()
+        return Response({"message": "đã sửa"}, status=200)
 class EditProduct(APIView):
     def put(self, request, id):
         images = request.data['img']
@@ -342,6 +353,7 @@ class EditUser(APIView):
         user.FullName = fullname
         user.UserName = name
         user.Email = email
+
         user.save()
         return Response({"message": "đã sửa"}, status=200)
 class AddCart(APIView):
@@ -563,34 +575,53 @@ class ProductByCategory(APIView):
             result.append(product_data)
         
         return Response(result, status=200)
-class Recommend(APIView):
-    def get(self, request):
-        userid = request.headers['userId']
-        user = User.objects.get(pk=userid) 
-        hoa = Order.objects.filter(User=user)
-        if(len(hoa)==0):
-            thirty_days_ago = datetime.now() - timedelta(days=30)
-            with connection.cursor() as cursor:
-                cursor.execute('SELECT p.id, p.ProductName, p.ProductCode, p.Price, p.Quatily, p.Imgage, p.Status, SUM(o.Amount) AS total_sales, COUNT(o.id) AS total_quantity FROM entity_product AS p LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = "1" AND o.Date >= %s GROUP BY p.id ORDER BY total_sales DESC', [thirty_days_ago])
-                rows = cursor.fetchall()
-                data = []
-                for row in rows:
-                    data.append({
-                        'id': row[0],
-                        'ProductName': row[1],
-                        'ProductCode': row[2],
-                        'price': row[3],
-                        'quantity': row[4],
-                        'img': row[5],
-                        'status': row[6],
-                        'total_sales': row[7] or 0,
-                        'total_quantity': row[8] or 0
-                    })
+# class Recommend(APIView):
+#     def get(self, request):
+#         userid = request.headers['userId']
+#         user = User.objects.get(pk=userid) 
+#         hoa = Order.objects.filter(User=user)
+#         if(len(hoa)==0):
+#             thirty_days_ago = datetime.now() - timedelta(days=30)
+#             with connection.cursor() as cursor:
+#                 cursor.execute('SELECT p.id, p.ProductName, p.ProductCode, p.Price, p.Quatily, p.Imgage, p.Status, SUM(o.Amount) AS total_sales, COUNT(o.id) AS total_quantity FROM entity_product AS p LEFT JOIN entity_order AS o ON p.id = o.Product_id AND o.Status = "1" AND o.Date >= %s GROUP BY p.id ORDER BY total_sales DESC', [thirty_days_ago])
+#                 rows = cursor.fetchall()
+#                 data = []
+#                 for row in rows:
+#                     data.append({
+#                         'id': row[0],
+#                         'ProductName': row[1],
+#                         'ProductCode': row[2],
+#                         'price': row[3],
+#                         'quantity': row[4],
+#                         'img': row[5],
+#                         'status': row[6],
+#                         'total_sales': row[7] or 0,
+#                         'total_quantity': row[8] or 0
+#                     })
 
-            return Response(data)
-    def get_smallest_categories(request):
-        smallest_categories = Category.objects.exclude(children__isnull=False).values('id', 'CategoryName')
-        return Response(list(smallest_categories), safe=False)
-        
+#             return Response(data)
+#     def get_smallest_categories(request):
+#         smallest_categories = Category.objects.exclude(children__isnull=False).values('id', 'CategoryName')
+#         return Response(list(smallest_categories), safe=False)
+#     @staticmethod
+#     def calculate_similarity(request):
+#         userid = request.headers['userId']
+#         user = User.objects.get(pk=userid) 
+#         source_product = Order.objects.filter(User=user)
+#         source_categories = source_product..all()
+
+#         similar_products = []
+#         for category in source_categories:
+#             category_products = category.categoryproduct_set.exclude(product=source_product)
+#             similar_products.extend(category_products)
+
+#         similarity_scores = {}
+#         for product in similar_products:
+#             similarity_scores[product.product.id] = len(set(product.product.categories.all()) & set(source_categories))
+
+#         sorted_scores = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
+#         sorted_product_ids = [product_id for product_id, _ in sorted_scores]
+
+#         return sorted_product_ids
 
         

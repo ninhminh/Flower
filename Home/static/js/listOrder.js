@@ -10,9 +10,9 @@ function add(){
             var s1 = document.getElementById('add');
             var s = '';
             for(var i=0; i<Response.length;i++){
-                
-                    s+= '<tr><td>' + (i+1) +'</td><td>'+ Response[i].Product +'</td><td>'+ Response[i].User +'</td><td>'+ Response[i].PhoneNumber +'</td><td>'+ Response[i].Amount +'</td><td class="setupproduct"><div class="editproduct" onclick="changeStatus(' + Response[i].id + ')">'+ Response[i].Status +'</div></td><td >pending</td><td class="setupproduct"><div class="editproduct">Sửa </div>  <div class="deleteproduct" onclick="xoa('+ Response[i].id+')">  Xóa </div> <div class="dowloadproduct"> Tải xuống</div><div class="clear"></div> </td> </tr>'
-                
+                if( Response[i].Status != 'Giỏ Hàng'){
+                    s+= '<tr><td>' + (i+1) +'</td><td>'+ Response[i].Product +'</td><td>'+ Response[i].User +'</td><td>'+ Response[i].PhoneNumber +'</td><td>'+Response[i].Address +'</td><td>'+ Response[i].Amount*Response[i].Price +'</td><td class="setupproduct"><div class="editproduct" onclick="changeStatus(' + Response[i].id + ')">'+ Response[i].Status +'</div></td><td >pending</td><td class="setupproduct"><div class="editproduct"><a href="/EditOrder/'+ Response[i].id +'" >Sửa </a></div>  <div class="deleteproduct" onclick="xoa('+ Response[i].id+')">  Xóa </div> <div class="dowloadproduct"> Tải xuống</div><div class="clear"></div> </td> </tr>'
+                }
             }
             s1.innerHTML =s;
         }else{
@@ -75,7 +75,7 @@ function sua(id){
 
         }
     }
-    xhttp.open("PUT", "/Apiv1/EditUser/" + id, false);
+    xhttp.open("PUT", "/Apiv1/EditOrder/" + id, false);
     xhttp.setRequestHeader("Content-type", "application/json")
     xhttp.send();
 
